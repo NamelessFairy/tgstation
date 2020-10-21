@@ -89,3 +89,49 @@
 
 /obj/item/fireaxe/metal_h2_axe/update_icon_state()
 	icon_state = "metalh2_axe0"
+
+/*
+* Folding Fire Axe
+*/
+/obj/item/fireaxe/folding //Fireaxe but portable
+	icon_state = "folding_axe0"
+	lefthand_file = 'icons/mob/inhands/weapons/axes_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/weapons/axes_righthand.dmi'
+	name = "folding fire axe"
+	desc = "A sleek and portable fire axe. For the madman who wants everything in life."
+	force = 0
+	throwforce = 0
+	w_class = WEIGHT_CLASS_NORMAL
+	slot_flags = ITEM_SLOT_BELT
+	var/unfold_sound = 'sound/weapons/batonextend.ogg'
+
+/obj/item/fireaxe/folding/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_TWOHANDED_WIELD, .proc/on_unfold)
+	RegisterSignal(src, COMSIG_TWOHANDED_UNWIELD, .proc/on_fold)
+
+/obj/item/fireaxe/folding/ComponentInitialize()
+	. = ..()
+	AddComponent(/datum/component/two_handed, force_unwielded=2, force_wielded=14, icon_wielded="folding_axe1")
+
+/// triggered on wield of two handed item
+/obj/item/fireaxe/folding/proc/on_unfold(obj/item/source, mob/user)
+	SIGNAL_HANDLER
+
+	wielded = TRUE
+	playsound(src.loc, unfold_sound, 50, TRUE)
+	w_class = WEIGHT_CLASS_BULKY
+	slot_flags = null
+
+/// triggered on unwield of two handed item
+/obj/item/fireaxe/folding/proc/on_fold(obj/item/source, mob/user)
+	SIGNAL_HANDLER
+
+	wielded = FALSE
+	playsound(src.loc, unfold_sound, 50, TRUE)
+	w_class = WEIGHT_CLASS_NORMAL
+	slot_flags = ITEM_SLOT_BELT
+
+
+/obj/item/fireaxe/folding/update_icon_state()
+	icon_state = "folding_axe0"
