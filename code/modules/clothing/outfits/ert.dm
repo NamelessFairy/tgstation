@@ -424,3 +424,29 @@
 	backpack_contents = list(/obj/item/storage/box/survival/engineer=1,\
 		/obj/item/storage/box/fireworks=3,\
 		/obj/item/food/cake/birthday=1)
+
+/datum/outfit/centcom/ert/commander/fire
+	name = "EFS Chief"
+
+	id = /obj/item/card/id/ert
+	mask = /obj/item/clothing/mask/gas/atmos
+	head = /obj/item/clothing/head/hardhat/atmos
+	suit = /obj/item/clothing/suit/fire/atmos
+	suit_store = /obj/item/tank/internals/oxygen/red
+	glasses = /obj/item/clothing/glasses/meson/night
+	back = /obj/item/storage/backpack/ert/engineer
+	belt = /obj/item/storage/belt/utility/atmostech
+	backpack_contents = list(/obj/item/storage/box/survival/engineer=1, \
+		/obj/item/storage/firstaid/fire=1, \
+		/obj/item/extinguisher/advanced=1, \
+		/obj/item/fireaxe/folding=1)
+	l_pocket = /obj/item/analyzer
+
+/datum/outfit/centcom/ert/commander/fire/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	..()
+
+	if(visualsOnly)
+		return
+	var/obj/item/radio/R = H.ears
+	R.keyslot = new /obj/item/encryptionkey/heads/captain
+	R.recalculateChannels()

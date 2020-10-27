@@ -164,6 +164,10 @@
 	role = "Party Coordinator"
 	outfit = /datum/outfit/centcom/ert/commander/party
 
+/datum/antagonist/ert/commander/fire
+	role = "Fire Chief"
+	outfit = /datum/outfit/centcom/ert/commander/fire
+
 /datum/antagonist/ert/create_team(datum/team/ert/new_team)
 	if(istype(new_team))
 		ert_team = new_team
