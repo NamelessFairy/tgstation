@@ -1,18 +1,19 @@
 /obj/effect/landmark/ctf
 	name = "CTF Map Spawner"
+	var/list/map_options = subtypesof(/datum/map_template/ctf)
+	var/turf/spawn_area = get_turf(src)
+	var/datum/map_template/ctf/current_map
+	var/datum/map_generator/massdelete/map_deleter
 
 /obj/effect/landmark/ctf/Initialize(mapload)
 	. = ..()
 	INVOKE_ASYNC(src, .proc/load_map)
 
 /obj/effect/landmark/ctf/proc/load_map()
-	
-	var/list/map_options = subtypesof(/datum/map_template/ctf)
-	var/turf/spawn_area = get_turf(src)
-	var/datum/map_template/ctf/current_map
 
 	current_map = pick(map_options)
 	current_map = new current_map
+	map_deleter = new
 
 	if(!spawn_area)
 		CRASH("No spawn area detected for CTF!")
@@ -21,6 +22,11 @@
 	var/list/bounds = current_map.load(spawn_area, TRUE)
 	if(!bounds)
 		CRASH("Loading CTF map failed!")
+	map_deleter.defineRegion(spawn_area, locate(spawn_area.x + 23,spawn_area.y + 23,spawn_area.z), replace = TRUE)
+
+/obj/effect/landmark/proc/clear_map()
+	map_deleter.generate()
+	load_map() 
 
 /datum/map_template/ctf
 	var/description = ""

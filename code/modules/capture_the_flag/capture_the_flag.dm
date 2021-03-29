@@ -217,6 +217,7 @@
 	var/ammo_type = /obj/effect/powerup/ammo/ctf
 	// Fast paced gameplay, no real time for burn infections.
 	var/player_traits = list(TRAIT_NEVER_WOUNDED)
+	var/obj/effect/landmark/ctf/ctf_spawner in GLOB.landmarks_list
 
 	var/list/dead_barricades = list()
 
@@ -418,6 +419,7 @@
 			CTF.ctf_enabled = FALSE
 			CTF.team_members = list()
 			CTF.arena_reset = FALSE
+			ctf_spawner.clear_map()
 
 /obj/machinery/capture_the_flag/proc/toggle_ctf()
 	if(!ctf_enabled)
