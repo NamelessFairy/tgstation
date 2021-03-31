@@ -116,6 +116,21 @@
 	base_icon_state = "plastinum_wall"
 	smoothing_flags = SMOOTH_BITMASK | SMOOTH_DIAGONAL_CORNERS
 
+/turf/closed/indestructible/riveted/aluminum
+	name = "wall"
+	icon = 'icons/turf/walls/aluminum_wall.dmi'
+	icon_state = "survival_pod_walls-0"
+	base_icon_state = "survival_pod_walls"
+	smoothing_flags = SMOOTH_BITMASK | SMOOTH_DIAGONAL_CORNERS
+	smoothing_groups = list(SMOOTH_GROUP_CLOSED_TURFS, SMOOTH_GROUP_WALLS, SMOOTH_GROUP_TITANIUM_WALLS, SMOOTH_GROUP_SURVIVAL_TIANIUM_POD)
+	canSmoothWith = list(SMOOTH_GROUP_SURVIVAL_TIANIUM_POD)
+
+/turf/closed/indestructible/riveted/aluminum/red
+	icon = 'icons/turf/walls/aluminum_red_wall.dmi'
+
+/turf/closed/indestructible/riveted/aluminum/blue
+	icon = 'icons/turf/walls/aluminum_blue_wall.dmi'
+
 /turf/closed/indestructible/wood
 	icon = 'icons/turf/walls/wood_wall.dmi'
 	icon_state = "wood_wall-0"
