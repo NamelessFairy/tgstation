@@ -355,7 +355,8 @@
 	var/throw_stun_chance = 35
 	var/obj/item/stock_parts/cell/cell
 	var/preload_cell_type //if not empty the baton starts with this type of cell
-	var/cell_hit_cost = 1000
+	var/cell_hit_cost = 500
+	var/drain_charge = 250 //Rate in which power drains
 	var/can_remove_cell = TRUE
 	var/convertible = TRUE //if it can be converted with a conversion kit
 
@@ -454,7 +455,14 @@
 	if(cell?.charge >= cell_hit_cost)
 		active = !active
 		balloon_alert(user, "turned [active ? "on" : "off"]")
-		playsound(src, "sparks", 75, TRUE, -1)
+		if(active)
+			cooldown_check = world.time + cooldown
+			playsound(src, 'sound/mecha/skyfall_power_up.ogg', 90, FALSE, -1)
+			update_appearance()
+			START_PROCESSING(SSobj, src)
+		else
+			playsound(src, "sparks", 75, TRUE, -1)
+			STOP_PROCESSING(SSobj, src)
 	else
 		active = FALSE
 		if(!cell)
@@ -463,6 +471,17 @@
 			balloon_alert(user, "out of charge!")
 	update_appearance()
 	add_fingerprint(user)
+
+/obj/item/melee/baton/security/process(delta_time)
+	if(!cell)
+		return
+	. = cell.use(drain_charge)
+	if(active && cell.charge < cell_hit_cost)
+		//we're below minimum, turn off
+		active = FALSE
+		update_appearance()
+		playsound(src, "sparks", 75, TRUE, -1)
+		STOP_PROCESSING(SSobj, src)
 
 /obj/item/melee/baton/security/proc/deductcharge(deducted_charge)
 	if(!cell)
@@ -565,7 +584,8 @@
 	w_class = WEIGHT_CLASS_BULKY
 	force = 3
 	throwforce = 5
-	cell_hit_cost = 2000
+	cell_hit_cost = 1000
+	drain_charge = 500
 	throw_stun_chance = 10
 	slot_flags = ITEM_SLOT_BACK
 	convertible = FALSE
@@ -609,7 +629,7 @@
 	force = 5
 	throwforce = 5
 	throw_range = 5
-	cell_hit_cost = 2000
+	cell_hit_cost = 1000
 	throw_stun_chance = 99  //Have you prayed today?
 	convertible = FALSE
 	custom_materials = list(/datum/material/iron = 10000, /datum/material/glass = 4000, /datum/material/silver = 10000, /datum/material/gold = 2000)
