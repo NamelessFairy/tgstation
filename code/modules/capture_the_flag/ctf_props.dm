@@ -1,7 +1,10 @@
 /obj/effect/immovablerod/ctf
+    var/direction = LEFT
+    loopy_rod = TRUE
 
+/obj/effect/immovablerod/ctf/New()
+    . = ..()
 
-/obj/effect/immovablerod/ctf/New(atom/start, atom/end, aimed_at, force_looping)
-    RegisterSignal(src, COMSIG_ATOM_ENTERING, .proc/on_entering_atom)
+/obj/effect/immovablerod/ctf/Initialize(mapload)
+    . = ..()
     walk_in_direction(direction)
-    return
