@@ -19,6 +19,13 @@
 	},
 /turf/open/floor/iron/textured,
 /area/space)
+"f" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/yellow/line,
+/turf/open/floor/iron/textured,
+/area/space)
 "g" = (
 /turf/closed/wall,
 /area/space)
@@ -37,10 +44,34 @@
 /obj/machinery/control_point,
 /turf/open/floor/circuit/green/off,
 /area/space)
+"l" = (
+/obj/effect/overlay/shadow/directional,
+/turf/open/space/basic,
+/area/space)
 "m" = (
 /turf/open/floor/grass,
 /area/space)
+"o" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 9
+	},
+/turf/open/space/basic,
+/area/space)
 "p" = (
+/turf/open/floor/iron/textured,
+/area/space)
+"q" = (
+/obj/effect/overlay/shadow,
+/turf/open/floor/iron/dark/smooth_large,
+/area/space)
+"r" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 1
+	},
+/turf/open/space/basic,
+/area/space)
+"u" = (
+/obj/effect/overlay/shadow,
 /turf/open/floor/iron/textured,
 /area/space)
 "v" = (
@@ -48,6 +79,15 @@
 /area/space)
 "w" = (
 /turf/open/floor/iron/white/smooth_large,
+/area/space)
+"x" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/yellow/line{
+	dir = 1
+	},
+/turf/open/floor/iron/textured,
 /area/space)
 "y" = (
 /obj/structure/window/reinforced{
@@ -58,22 +98,47 @@
 	},
 /turf/open/space/basic,
 /area/space)
-"B" = (
-/obj/structure/window/reinforced{
-	atom_integrity = 5000;
-	dir = 8;
-	max_integrity = 5000;
-	name = "hardened window"
+"A" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 8
 	},
-/turf/open/space/basic,
+/turf/open/floor/iron/dark/smooth_large,
+/area/space)
+"B" = (
+/obj/effect/overlay/shadow,
+/obj/effect/turf_decal/trimline/yellow/line{
+	dir = 1
+	},
+/turf/open/floor/iron/textured,
 /area/space)
 "C" = (
+/obj/effect/turf_decal/trimline/yellow/line,
+/turf/open/floor/iron/textured,
+/area/space)
+"F" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 8
+	},
+/turf/open/floor/iron/textured,
+/area/space)
+"H" = (
+/obj/effect/overlay/shadow,
 /obj/effect/turf_decal/trimline/yellow/line,
 /turf/open/floor/iron/textured,
 /area/space)
 "J" = (
 /obj/structure/stairs/south,
 /turf/open/floor/iron/textured,
+/area/space)
+"L" = (
+/obj/effect/overlay/shadow,
+/turf/open/space/basic,
+/area/space)
+"M" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 10
+	},
+/turf/open/space/basic,
 /area/space)
 "N" = (
 /obj/structure/window/reinforced{
@@ -83,6 +148,12 @@
 	name = "hardened window"
 	},
 /turf/open/floor/iron/textured,
+/area/space)
+"O" = (
+/obj/effect/overlay/shadow/directional{
+	dir = 8
+	},
+/turf/open/space/basic,
 /area/space)
 "P" = (
 /obj/effect/turf_decal/trimline/yellow/line{
@@ -3431,17 +3502,17 @@ g
 g
 g
 g
+q
+q
+q
 B
-B
-B
-B
-B
-B
-B
-B
-B
-B
-B
+u
+u
+u
+H
+q
+q
+q
 g
 g
 g
@@ -3527,29 +3598,29 @@ a
 a
 a
 a
-a
-a
-a
-a
-a
-a
-T
-T
-T
-a
-a
-a
-a
-a
-T
-T
-T
-a
-a
-a
-a
-a
-a
+l
+L
+L
+L
+L
+L
+q
+q
+q
+B
+u
+u
+u
+H
+q
+q
+q
+L
+L
+L
+L
+L
+r
 a
 a
 a
@@ -3629,29 +3700,29 @@ a
 a
 a
 a
-a
-a
-a
-a
-a
-a
-T
-T
-T
-a
-a
-a
-a
-a
-T
-T
-T
-a
-a
-a
-a
-a
-a
+M
+O
+O
+O
+O
+O
+A
+A
+A
+x
+F
+F
+F
+f
+A
+A
+A
+O
+O
+O
+O
+O
+o
 a
 a
 a
@@ -3740,11 +3811,11 @@ a
 T
 T
 T
-a
-a
-a
-a
-a
+P
+p
+p
+p
+C
 T
 T
 T
@@ -3842,11 +3913,11 @@ a
 T
 T
 T
-a
-a
-a
-a
-a
+P
+p
+p
+p
+C
 T
 T
 T
@@ -3944,11 +4015,11 @@ a
 T
 T
 T
-a
-a
-a
-a
-a
+P
+p
+p
+p
+C
 T
 T
 T

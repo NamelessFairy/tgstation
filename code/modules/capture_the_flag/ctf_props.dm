@@ -1,10 +1,10 @@
-/obj/effect/immovablerod/ctf
-    var/direction = LEFT
-    loopy_rod = TRUE
+/obj/effect/overlay/shadow
+    icon = 'icons/turf/decals.dmi'
+    name = "shadow"
+    layer = WALL_OBJ_LAYER
+    icon_state = "shadow"
+    anchored = TRUE
+    mouse_opacity = 0
 
-/obj/effect/immovablerod/ctf/New()
-    . = ..()
-
-/obj/effect/immovablerod/ctf/Initialize(mapload)
-    . = ..()
-    walk_in_direction(direction)
+/obj/effect/overlay/shadow/directional
+    icon_state = "directional_shadow"
