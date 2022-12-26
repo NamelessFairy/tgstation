@@ -50,6 +50,7 @@ GLOBAL_LIST_INIT(admin_verbs_debug_mapping, list(
 	/client/proc/stop_line_profiling,
 	/client/proc/show_line_profiling,
 	/client/proc/create_mapping_job_icons,
+	/client/proc/export_dmi,
 	/client/proc/debug_z_levels,
 	/client/proc/place_ruin,
 	/client/proc/station_food_debug,
@@ -315,6 +316,11 @@ GLOBAL_VAR_INIT(say_disabled, FALSE)
 	for(var/x_number in 1 to 4)
 		final.Insert(icon('icons/hud/screen_gen.dmi', "x[x_number == 1 ? "" : x_number]"), "x[x_number == 1 ? "" : x_number]")
 	fcopy(final, "icons/mob/landmarks.dmi")
+
+/client/proc/export_dmi(atom/A in world)
+	set name = "Export as DMI"
+	set category = "Mapping"
+	fcopy(icon(getFlatIcon(A)), "icons/export.dmi")
 
 /client/proc/debug_z_levels()
 	set name = "Debug Z-Levels"
