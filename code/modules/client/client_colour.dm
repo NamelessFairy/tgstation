@@ -218,6 +218,16 @@
 	override = TRUE
 	colour = list(0.8,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1, 0,0,0,0)
 
+/datum/client_colour/dreams
+	priority = PRIORITY_ABSOLUTE
+	colour = list(0.3,0,0.3, 0.3,0,0.3, 0.3,0,0.3)
+	fade_out = 30 SECONDS
+
+/datum/client_colour/dreams/New(mob/_owner)
+	..()
+	addtimer(CALLBACK(src, PROC_REF(update_colour), list(0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3, 0.1,0,0.1), 20 SECONDS, SINE_EASING|EASE_OUT), 1)
+
+
 #undef PRIORITY_ABSOLUTE
 #undef PRIORITY_HIGH
 #undef PRIORITY_NORMAL

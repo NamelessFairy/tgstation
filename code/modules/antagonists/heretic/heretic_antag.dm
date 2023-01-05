@@ -58,6 +58,7 @@
 		PATH_ASH = "white",
 		PATH_VOID = "blue",
 		PATH_BLADE = "label", // my favorite color is label
+		PATH_DREAM = "violet",
 	)
 
 /datum/antagonist/heretic/Destroy()
