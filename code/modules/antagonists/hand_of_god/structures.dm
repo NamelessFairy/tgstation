@@ -18,4 +18,4 @@
 			if (requirements.len == 0)
 				new result(loc)
 				to_chat(user, span_notice("You completed the toilet summoning ritual"))
-				Destroy()
+				qdel(src)
