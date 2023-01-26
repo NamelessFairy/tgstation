@@ -18,6 +18,10 @@
 	/// What message should the player receive when they are being demoted, and the revolution has won?
 	var/victory_message = "The revolution has overpowered the command staff! Viva la revolution! Execute any head of staff and security should you find them alive."
 
+	var/conversion_allowed = TRUE
+
+	var/conversion_cooldown = 30 SECONDS
+
 /datum/antagonist/rev/can_be_owned(datum/mind/new_owner)
 	. = ..()
 	if(.)
@@ -226,7 +230,9 @@
 	return TRUE
 
 /datum/antagonist/rev/proc/add_revolutionary(datum/mind/rev_mind,stun = TRUE)
-	if(!can_be_converted(rev_mind.current))
+//	if(!can_be_converted(rev_mind.current))
+//		return FALSE
+	if(!conversion_allowed)
 		return FALSE
 	if(stun)
 		rev_mind.current.set_silence_if_lower(10 SECONDS)
@@ -236,7 +242,12 @@
 	rev_mind.add_memory(/datum/memory/recruited_by_headrev, protagonist = rev_mind.current, antagonist = owner.current)
 	rev_mind.add_antag_datum(/datum/antagonist/rev,rev_team)
 	rev_mind.special_role = ROLE_REV
+	addtimer(CALLBACK(src, PROC_REF(allow_conversion)),conversion_cooldown,TIMER_UNIQUE)
+	conversion_allowed = FALSE
 	return TRUE
+
+/datum/antagonist/rev/proc/allow_conversion()
+	conversion_allowed = TRUE
 
 /datum/antagonist/rev/head/proc/demote()
 	var/datum/mind/old_owner = owner
