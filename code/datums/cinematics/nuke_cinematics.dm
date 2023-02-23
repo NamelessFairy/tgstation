@@ -91,7 +91,7 @@
 
 /// The syndicate nuclear bomb was activated, but just missed the station by a whole z-level!
 /datum/cinematic/nuke/far_explosion
-	cleanup_time = 0 SECONDS
+	cleanup_time = 10 SECONDS
 
 /datum/cinematic/nuke/far_explosion/play_cinematic()
 	// This one has no intro sequence.

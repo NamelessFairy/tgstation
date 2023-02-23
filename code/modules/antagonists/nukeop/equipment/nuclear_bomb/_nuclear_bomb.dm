@@ -527,6 +527,7 @@ GLOBAL_VAR(station_nuke_source)
 	if(!core)
 		play_cinematic(/datum/cinematic/nuke/no_core, world)
 		SSticker.roundend_check_paused = FALSE
+		SSsecurity_level.set_level(previous_level)
 		return
 
 	var/detonation_status
@@ -569,16 +570,20 @@ GLOBAL_VAR(station_nuke_source)
 	return detonation_status
 
 /obj/machinery/nuclearbomb/proc/really_actually_explode(detonation_status)
-	play_cinematic(get_cinematic_type(detonation_status), world, CALLBACK(SSticker, TYPE_PROC_REF(/datum/controller/subsystem/ticker, station_explosion_detonation), src))
-
 	var/turf/bomb_location = get_turf(src)
 	var/list/z_levels_to_blow = list()
+
+	play_cinematic(get_cinematic_type(detonation_status), world, CALLBACK(SSticker, TYPE_PROC_REF(/datum/controller/subsystem/ticker, station_explosion_detonation), src))
+
 	if(detonation_status == DETONATION_HIT_STATION)
 		z_levels_to_blow |= SSmapping.levels_by_trait(ZTRAIT_STATION)
 
 	// Don't kill people in the station if the nuke missed, even if we are technically on the same z-level
 	else if(detonation_status != DETONATION_NEAR_MISSED_STATION)
 		z_levels_to_blow |= bomb_location.z
+		SSsecurity_level.set_level(previous_level)
+	else
+		SSsecurity_level.set_level(previous_level)
 
 	if(length(z_levels_to_blow))
 		nuke_effects(z_levels_to_blow)
