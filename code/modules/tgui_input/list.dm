@@ -56,6 +56,8 @@
 	var/timeout
 	/// Boolean field describing if the tgui_list_input was closed by the user.
 	var/closed
+	///AAAAAA LISSSSSSTTTTTT AAAAA
+	var/list/choices = list()
 
 /datum/tgui_list_input/New(mob/user, message, title, list/items, default, timeout)
 	src.title = title
@@ -113,6 +115,7 @@
 	data["message"] = message
 	data["swapped_buttons"] = user.client.prefs.read_preference(/datum/preference/toggle/tgui_input_swapped)
 	data["title"] = title
+	data["choices"] = choices
 	return data
 
 /datum/tgui_list_input/ui_data(mob/user)

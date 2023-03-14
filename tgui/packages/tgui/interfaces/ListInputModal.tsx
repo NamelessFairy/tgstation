@@ -12,6 +12,7 @@ type ListInputData = {
   message: string;
   timeout: number;
   title: string;
+  choices: number[];
 };
 
 export const ListInputModal = (props, context) => {
@@ -23,6 +24,7 @@ export const ListInputModal = (props, context) => {
     large_buttons,
     timeout,
     title,
+    choices,
   } = data;
   const [selected, setSelected] = useLocalState<number>(
     context,
@@ -66,6 +68,7 @@ export const ListInputModal = (props, context) => {
     if (index === selected) {
       return;
     }
+    choices.push(index);
     setSelected(index);
   };
   // User presses a letter key and searchbar is visible
@@ -185,14 +188,21 @@ export const ListInputModal = (props, context) => {
  */
 const ListDisplay = (props, context) => {
   const { act } = useBackend<ListInputData>(context);
-  const { filteredItems, onClick, onFocusSearch, searchBarVisible, selected } =
-    props;
+  const {
+    filteredItems,
+    onClick,
+    onFocusSearch,
+    searchBarVisible,
+    selected,
+    choices,
+  } = props;
 
   return (
     <Section fill scrollable tabIndex={0}>
       {filteredItems.map((item, index) => {
         return (
-          <Button
+          <Button.Checkbox
+            checked={choices.includes(index)}
             color="transparent"
             fluid
             id={index}
@@ -215,7 +225,7 @@ const ListDisplay = (props, context) => {
               'transition': 'none',
             }}>
             {item.replace(/^\w/, (c) => c.toUpperCase())}
-          </Button>
+          </Button.Checkbox>
         );
       })}
     </Section>
