@@ -7,6 +7,7 @@
 	anchored = TRUE
 	max_integrity = 200
 	integrity_failure = 0.5
+	var/obj/effect/mirror_reflection/reflection
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 
@@ -14,6 +15,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 	. = ..()
 	if(icon_state == "mirror_broke" && !broken)
 		atom_break(null, mapload)
+	reflection = new
+	vis_contents += reflection
+	reflection.setup_visuals(get_turf(src))
 
 /obj/structure/mirror/attack_hand(mob/user, list/modifiers)
 	. = ..()
@@ -121,6 +125,29 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, TRUE)
 		if(BURN)
 			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, TRUE)
+
+/obj/effect/mirror_reflection
+	appearance_flags = KEEP_TOGETHER|TILE_BOUND|PIXEL_SCALE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	vis_flags = VIS_INHERIT_ID
+	layer = BELOW_OBJ_LAYER
+	alpha = 150
+	var/turf/reflection_turf
+	pixel_z = -8
+
+/obj/effect/mirror_reflection/proc/setup_visuals(turf/turf, mirror_ref)
+	reflection_turf = turf
+//	transform = transform.Scale(1,-1)
+	clear_filters()
+	vis_contents = null
+
+	add_filter("mask", 1, alpha_mask_filter(icon = icon('icons/obj/watercloset.dmi', "mirror_mask")))
+
+//	add_filter("portal_blur", 1, list("type" = "blur", "size" = 0.5))
+//	add_filter("portal_ripple", 1, list("type" = "ripple", "size" = 2, "radius" = 1, "falloff" = 1))
+
+//	animate(get_filter("portal_ripple"), time = 1.3 SECONDS, loop = -1, easing = LINEAR_EASING, radius = 32)
+	vis_contents += reflection_turf
 
 /obj/item/wallframe/mirror
 	name = "mirror"
