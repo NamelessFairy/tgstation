@@ -1,5 +1,5 @@
 /obj/effect/overlay/shadow
-    icon = 'icons/turf/decals.dmi'
+    icon = 'icons/turf/overlays.dmi'
     name = "shadow"
     layer = FLY_LAYER
     plane = ABOVE_GAME_PLANE
@@ -8,4 +8,7 @@
     mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /obj/effect/overlay/shadow/directional
-    icon_state = "directional_shadow"
+    icon_state = "shadow_directional"
+
+/obj/effect/overlay/shadow/corner
+    icon_state = "shadow_corner"
