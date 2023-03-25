@@ -3,3 +3,6 @@
 
 /// The game ID for normal ghost CTF
 #define CTF_GHOST_CTF_GAME_ID "centcom"
+
+//Todo Comment
+GLOBAL_VAR(ctf_game)

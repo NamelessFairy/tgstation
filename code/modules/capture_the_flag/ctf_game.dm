@@ -271,9 +271,13 @@
 
 	/// This variable is needed because of ctf shitcode + we need to make sure we're deleting the current ctf landmark that spawned us in and not a new one.
 	var/obj/effect/landmark/ctf/ctf_landmark
+	//Todo Comment this
+	var/datum/ctf_controller/ctf_game
 
 /obj/machinery/capture_the_flag/Initialize(mapload)
 	. = ..()
+	ctf_game = GLOB.ctf_game
+	ctf_game.add_team(team)
 	GLOB.ctf_panel.ctf_machines += src
 	SSpoints_of_interest.make_point_of_interest(src)
 	default_gear = ctf_gear
