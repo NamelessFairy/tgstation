@@ -24,7 +24,7 @@ GLOBAL_DATUM_INIT(ctf_panel, /datum/ctf_panel, new())
 		var/list/this = list()
 		this["name"] = team
 		this["color"] = team.team
-		this["score"] = team.points + team.control_points
+		this["score"] = team.ctf_game.get_points(team.team) + team.control_points
 		this["team_size"] = team.team_members.len
 		this["refs"] += REF(team)
 		teams += list(this)

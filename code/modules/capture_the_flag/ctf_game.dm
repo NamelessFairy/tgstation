@@ -245,7 +245,6 @@
 	var/team = WHITE_TEAM
 	var/team_span = ""
 	//Capture the Flag scoring
-	var/points = 0
 	var/points_to_win = 3
 	var/respawn_cooldown = DEFAULT_RESPAWN
 	//Capture Point/King of the Hill scoring
@@ -444,17 +443,17 @@
 		if(istype(ghost))
 			attack_ghost(ghost)
 
-/obj/machinery/capture_the_flag/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/ctf))
-		var/obj/item/ctf/flag = I
+/obj/machinery/capture_the_flag/attackby(obj/item/item, mob/user, params)
+	if(istype(item, /obj/item/ctf))
+		var/obj/item/ctf/flag = item
 		if(flag.team != src.team)
-			points++
+			ctf_game.score_point(team)
 			flag.reset_flag(capture = TRUE)
 			for(var/mob/ctf_player in GLOB.player_list)
 				var/area/mob_area = get_area(ctf_player)
 				if(istype(mob_area, game_area))
-					to_chat(ctf_player, "<span class='userdanger [team_span]'>[user.real_name] has captured \the [flag], scoring a point for [team] team! They now have [points]/[points_to_win] points!</span>")
-			if(points >= points_to_win)
+					to_chat(ctf_player, "<span class='userdanger [team_span]'>[user.real_name] has captured \the [flag], scoring a point for [team] team! They now have [ctf_game.get_points(team)]/[points_to_win] points!</span>")
+			if(ctf_game.get_points(team) >= points_to_win)
 				victory()
 
 /obj/machinery/capture_the_flag/proc/victory()
@@ -493,7 +492,7 @@
 	notify_ghosts("[name] has been activated!", source = src, action=NOTIFY_ORBIT, header = "CTF has been activated")
 
 /obj/machinery/capture_the_flag/proc/machine_reset(obj/machinery/capture_the_flag/CTF)
-	CTF.points = 0
+	ctf_game.reset_game()
 	CTF.control_points = 0
 	CTF.ctf_enabled = FALSE
 	CTF.team_members = list()
