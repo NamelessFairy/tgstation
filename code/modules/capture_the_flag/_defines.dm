@@ -5,4 +5,4 @@
 #define CTF_GHOST_CTF_GAME_ID "centcom"
 
 //Todo Comment
-GLOBAL_VAR(ctf_game)
+GLOBAL_LIST_EMPTY(ctf_games)

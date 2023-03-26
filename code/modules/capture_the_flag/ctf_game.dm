@@ -232,6 +232,7 @@
 #undef CTF_LOADING_LOADING
 #undef CTF_LOADING_LOADED
 
+//ToDo comment whatever vars I leave behind (btw maintainers I'm guarateed to forget to do this 🐈)
 /obj/machinery/capture_the_flag
 	name = "CTF Controller"
 	desc = "Used for running friendly games of capture the flag."
@@ -244,13 +245,10 @@
 	var/victory_rejoin_text = "<span class='userdanger'>Teams have been cleared. Click on the machines to vote to begin another round.</span>"
 	var/team = WHITE_TEAM
 	var/team_span = ""
-	//Capture the Flag scoring
-	var/points_to_win = 3
 	var/respawn_cooldown = DEFAULT_RESPAWN
 	//Capture Point/King of the Hill scoring
 	var/control_points = 0
 	var/control_points_to_win = 180
-	var/list/team_members = list()
 	///assoc list: mob = outfit datum (class)
 	var/list/spawned_mobs = list()
 	var/list/recently_dead_ckeys = list()
@@ -275,8 +273,8 @@
 
 /obj/machinery/capture_the_flag/Initialize(mapload)
 	. = ..()
-	ctf_game = GLOB.ctf_game
-	ctf_game.add_team(team)
+	ctf_game = GLOB.ctf_games[game_id]
+	ctf_game.add_team(src)
 	GLOB.ctf_panel.ctf_machines += src
 	SSpoints_of_interest.make_point_of_interest(src)
 	default_gear = ctf_gear
@@ -356,7 +354,7 @@
 
 	if(!SSticker.HasRoundStarted())
 		return
-	if(user.ckey in team_members)
+	if(user.ckey in ctf_game.get_players(team))
 		if(user.ckey in recently_dead_ckeys)
 			to_chat(user, span_warning("It must be more than [DisplayTimeText(respawn_cooldown)] from your last death to respawn!"))
 			return
@@ -366,20 +364,12 @@
 		spawn_team_member(new_team_member)
 		return
 
-	for(var/obj/machinery/capture_the_flag/CTF as anything in GLOB.ctf_panel.ctf_machines)
-		if(CTF.game_id != game_id || CTF == src || CTF.ctf_enabled == FALSE)
-			continue
-		if(user.ckey in CTF.team_members)
-			to_chat(user, span_warning("No switching teams while the round is going!"))
-			return
-		if(CTF.team_members.len < src.team_members.len)
-			to_chat(user, span_warning("[src.team] has more team members than [CTF.team]! Try joining [CTF.team] team to even things up."))
-			return
+	if(!ctf_game.team_valid_to_join(team, user))
+		return
 
-	var/client/new_team_member = user.client
-	team_members |= new_team_member.ckey
+	ctf_game.add_player(team, user.client)
 	to_chat(user, "<span class='userdanger'>You are now a member of [src.team]. Get the enemy flag and bring it back to your team's controller!</span>")
-	spawn_team_member(new_team_member)
+	spawn_team_member(user.client)
 
 
 //does not add to recently dead, because it dusts and that triggers ctf_qdelled_player
@@ -419,7 +409,7 @@
 
 		sort_list(display_classes)
 		var/choice = show_radial_menu(new_team_member.mob, src, display_classes, radius = 38)
-		if(!choice || !(GLOB.ghost_role_flags & GHOSTROLE_MINIGAME) || (new_team_member.ckey in recently_dead_ckeys) || !isobserver(new_team_member.mob) || src.ctf_enabled == FALSE || !(new_team_member.ckey in src.team_members))
+		if(!choice || !(GLOB.ghost_role_flags & GHOSTROLE_MINIGAME) || (new_team_member.ckey in recently_dead_ckeys) || !isobserver(new_team_member.mob) || src.ctf_enabled == FALSE || !(new_team_member.ckey in ctf_game.get_players(team)))
 			return //picked nothing, admin disabled it, cheating to respawn faster, cheating to respawn... while in game?,
 				   //there isn't a game going on any more, you are no longer a member of this team (perhaps a new match already started?)
 		chosen_class = ctf_gear[choice]
@@ -447,25 +437,15 @@
 	if(istype(item, /obj/item/ctf))
 		var/obj/item/ctf/flag = item
 		if(flag.team != src.team)
-			ctf_game.score_point(team)
+			ctf_game.score_point(team) //The text below this needs to be relocated inside of this proc at some point, (if a maint sees this tell me to do that)
 			flag.reset_flag(capture = TRUE)
 			for(var/mob/ctf_player in GLOB.player_list)
 				var/area/mob_area = get_area(ctf_player)
 				if(istype(mob_area, game_area))
-					to_chat(ctf_player, "<span class='userdanger [team_span]'>[user.real_name] has captured \the [flag], scoring a point for [team] team! They now have [ctf_game.get_points(team)]/[points_to_win] points!</span>")
-			if(ctf_game.get_points(team) >= points_to_win)
-				victory()
+					//Big issue on this line, I need to move this line to inside score_point() Yes I commented this twice
+					to_chat(ctf_player, "<span class='userdanger [team_span]'>[user.real_name] has captured \the [flag], scoring a point for [team] team! They now have [ctf_game.get_points(team)]/[ctf_game.points_to_win] points!</span>")
 
 /obj/machinery/capture_the_flag/proc/victory()
-	for(var/mob/_competitor in GLOB.mob_living_list)
-		var/mob/living/competitor = _competitor
-		var/area/mob_area = get_area(competitor)
-		if(istype(mob_area, game_area))
-			to_chat(competitor, "<span class='narsie [team_span]'>[team] team wins!</span>")
-			to_chat(competitor, victory_rejoin_text)
-			for(var/obj/item/ctf/W in competitor)
-				competitor.dropItemToGround(W)
-			competitor.dust()
 	control_point_reset()
 	for(var/obj/machinery/capture_the_flag/CTF as anything in GLOB.ctf_panel.ctf_machines)
 		if(CTF.game_id != game_id)
@@ -492,10 +472,9 @@
 	notify_ghosts("[name] has been activated!", source = src, action=NOTIFY_ORBIT, header = "CTF has been activated")
 
 /obj/machinery/capture_the_flag/proc/machine_reset(obj/machinery/capture_the_flag/CTF)
-	ctf_game.reset_game()
+	//ctf_game.reset_game() //This is broken atm, come back to, yell at me if I didn't
 	CTF.control_points = 0
 	CTF.ctf_enabled = FALSE
-	CTF.team_members = list()
 	CTF.arena_reset = FALSE
 
 /obj/machinery/capture_the_flag/proc/control_point_reset()
@@ -516,9 +495,8 @@
 	var/area/A = get_area(src)
 	for(var/_competitor in GLOB.mob_living_list)
 		var/mob/living/competitor = _competitor
-		if((get_area(A) == A) && (competitor.ckey in team_members))
+		if((get_area(A) == A) && (competitor.ckey in ctf_game.get_players(team)))
 			competitor.dust()
-	team_members.Cut()
 	spawned_mobs.Cut()
 	recently_dead_ckeys.Cut()
 	control_point_reset()
@@ -662,7 +640,7 @@
 /obj/machinery/control_point/proc/capture(mob/user)
 	if(do_after(user, 30, target = src))
 		for(var/obj/machinery/capture_the_flag/team as anything in GLOB.ctf_panel.ctf_machines)
-			if(team.ctf_enabled && (user.ckey in team.team_members))
+			if(team.ctf_enabled && (user.ckey in team.ctf_game.get_players(team.team)))
 				controlling = team
 				icon_state = "dominator-[team.team]"
 				for(var/mob/M in GLOB.player_list)
