@@ -29,7 +29,9 @@
 	var/obj/effect/ctf/flag_reset/reset
 	var/reset_path = /obj/effect/ctf/flag_reset
 	/// Which area we announce updates on the flag to. Should just generally be the area of the arena.
-	var/game_area = /area/centcom/ctf
+	var/game_area = /area/centcom/ctf //Delete later (Maintainers please yell at me if I forget)
+	var/game_id = CTF_GHOST_CTF_GAME_ID
+	var/datum/ctf_controller/ctf_game
 
 /obj/item/ctf/Destroy()
 	QDEL_NULL(reset)
@@ -40,6 +42,7 @@
 	if(!reset)
 		reset = new reset_path(get_turf(src))
 		reset.flag = src
+	ctf_game = GLOB.ctf_games[game_id]
 
 /obj/item/ctf/process()
 	if(is_ctf_target(loc)) //pickup code calls temporary drops to test things out, we need to make sure the flag doesn't reset from
@@ -54,11 +57,8 @@
 	if(!our_turf)
 		return TRUE
 	forceMove(our_turf)
-	for(var/mob/M in GLOB.player_list)
-		var/area/mob_area = get_area(M)
-		if(istype(mob_area, game_area))
-			if(!capture)
-				to_chat(M, span_userdanger("[src] has been returned to the base!"))
+	if(!capture)
+		ctf_game.message_all_teams("[src] has been returned to the base!")
 
 //working with attack hand feels like taking my brain and putting it through an industrial pill press so i'm gonna be a bit liberal with the comments
 /obj/item/ctf/attack_hand(mob/living/user, list/modifiers)
@@ -72,10 +72,7 @@
 	if(loc == user)
 		if(!user.dropItemToGround(src))
 			return
-	for(var/mob/M in GLOB.player_list)
-		var/area/mob_area = get_area(M)
-		if(istype(mob_area, game_area))
-			to_chat(M, span_userdanger("\The [initial(src.name)] has been taken!"))
+	ctf_game.message_all_teams(span_userdanger("\The [initial(src.name)] has been taken!"))
 	STOP_PROCESSING(SSobj, src)
 	anchored = FALSE // Hacky usage that bypasses set_anchored(), because normal checks need this to be FALSE to pass
 	. = ..() //this is the actual normal item checks
@@ -92,10 +89,7 @@
 	user.status_flags |= CANPUSH
 	reset_cooldown = world.time + 20 SECONDS
 	START_PROCESSING(SSobj, src)
-	for(var/mob/M in GLOB.player_list)
-		var/area/mob_area = get_area(M)
-		if(istype(mob_area, game_area))
-			to_chat(M, span_userdanger("\The [initial(name)] has been dropped!"))
+	ctf_game.message_all_teams(span_userdanger("\The [initial(name)] has been dropped!"))
 	anchored = TRUE // Avoid directly assigning to anchored and prefer to use set_anchored() on normal circumstances.
 
 
@@ -264,7 +258,7 @@
 	var/list/dead_barricades = list()
 
 	var/static/arena_reset = FALSE
-	var/game_area = /area/centcom/ctf
+	var/game_area = /area/centcom/ctf //Todo: Kill this var
 
 	/// This variable is needed because of ctf shitcode + we need to make sure we're deleting the current ctf landmark that spawned us in and not a new one.
 	var/obj/effect/landmark/ctf/ctf_landmark
@@ -368,6 +362,8 @@
 		return
 
 	ctf_game.add_player(team, user.client)
+	if(!user.mind.GetComponent(/datum/component/ctf_player))
+		user.mind.AddComponent(/datum/component/ctf_player, team)
 	to_chat(user, "<span class='userdanger'>You are now a member of [src.team]. Get the enemy flag and bring it back to your team's controller!</span>")
 	spawn_team_member(user.client)
 
@@ -437,13 +433,8 @@
 	if(istype(item, /obj/item/ctf))
 		var/obj/item/ctf/flag = item
 		if(flag.team != src.team)
-			ctf_game.score_point(team) //The text below this needs to be relocated inside of this proc at some point, (if a maint sees this tell me to do that)
+			ctf_game.capture_flag(team, user, team_span, flag)
 			flag.reset_flag(capture = TRUE)
-			for(var/mob/ctf_player in GLOB.player_list)
-				var/area/mob_area = get_area(ctf_player)
-				if(istype(mob_area, game_area))
-					//Big issue on this line, I need to move this line to inside score_point() Yes I commented this twice
-					to_chat(ctf_player, "<span class='userdanger [team_span]'>[user.real_name] has captured \the [flag], scoring a point for [team] team! They now have [ctf_game.get_points(team)]/[ctf_game.points_to_win] points!</span>")
 
 /obj/machinery/capture_the_flag/proc/victory()
 	control_point_reset()
@@ -469,10 +460,8 @@
 
 	dead_barricades.Cut()
 
-	notify_ghosts("[name] has been activated!", source = src, action=NOTIFY_ORBIT, header = "CTF has been activated")
-
 /obj/machinery/capture_the_flag/proc/machine_reset(obj/machinery/capture_the_flag/CTF)
-	//ctf_game.reset_game() //This is broken atm, come back to, yell at me if I didn't
+	//ctf_game.reset_game() //This is broken atm, come back to, yell at me if I didn't. Basically what needs to be done is reset game needs to be called where machine reset is called but after some other code completes.
 	CTF.control_points = 0
 	CTF.ctf_enabled = FALSE
 	CTF.arena_reset = FALSE
@@ -611,7 +600,12 @@
 	var/team = "none"
 	///This is how many points are gained a second while controlling this point
 	var/point_rate = 1
-	var/game_area = /area/centcom/ctf
+	var/game_id = CTF_GHOST_CTF_GAME_ID
+	var/datum/ctf_controller/ctf_game
+
+/obj/machinery/control_point/Initialize(mapload)
+	. = ..()
+	ctf_game = GLOB.ctf_games[game_id]
 
 /obj/machinery/control_point/process(delta_time)
 	if(controlling)
@@ -639,26 +633,22 @@
 
 /obj/machinery/control_point/proc/capture(mob/user)
 	if(do_after(user, 30, target = src))
-		for(var/obj/machinery/capture_the_flag/team as anything in GLOB.ctf_panel.ctf_machines)
-			if(team.ctf_enabled && (user.ckey in team.ctf_game.get_players(team.team)))
-				controlling = team
-				icon_state = "dominator-[team.team]"
-				for(var/mob/M in GLOB.player_list)
-					var/area/mob_area = get_area(M)
-					if(istype(mob_area, game_area))
-						to_chat(M, "<span class='userdanger [team.team_span]'>[user.real_name] has captured \the [src], claiming it for [team.team]! Go take it back!</span>")
-				break
+		var/datum/component/ctf_player/team_component = user.mind.GetComponent(/datum/component/ctf_player)
+		if(!team_component || !ctf_game.ctf_enabled)
+			return //You can't capture a control point without a team or while ctf is not running
+		controlling = team_component.team
+		icon_state = "dominator-[controlling]"
+		ctf_game.message_all_teams("<span class='userdanger [/*Insert team span code here when you figure out a way to impliment it*/]'>[user.real_name] has captured \the [src], claiming it for [controlling]! Go take it back!</span>")
 
 /proc/is_ctf_target(atom/target)
 	. = FALSE
 	if(istype(target, /obj/structure/barricade/security/ctf))
 		. = TRUE
 	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		for(var/obj/machinery/capture_the_flag/CTF as anything in GLOB.ctf_panel.ctf_machines)
-			if(H in CTF.spawned_mobs)
-				. = TRUE
-				break
+		var/mob/living/carbon/human/human = target
+		var/datum/mind/target_mind = human.mind
+		if(target_mind?.GetComponent(/datum/component/ctf_player))
+			. = TRUE
 
 #undef WHITE_TEAM
 #undef RED_TEAM

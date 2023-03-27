@@ -8,6 +8,7 @@
 	var/list/datum/ctf_team/teams = list()
 	var/points_to_win = 3
 	var/gamemode = CTF_GAMEMODE_CAPTURE_THE_FLAG
+	var/ctf_enabled = FALSE
 
 /datum/ctf_controller/New()
 	. = ..()
@@ -16,6 +17,13 @@
 /datum/ctf_controller/Destroy(force, ...)
 	. = ..()
 	GLOB.ctf_games[game_id] = null
+
+/datum/ctf_controller/proc/start_ctf()
+	ctf_enabled = TRUE
+	for(var/team in teams)
+		var/obj/machinery/capture_the_flag/spawner = teams[team].spawner
+		notify_ghosts("[spawner.name] has been activated!", source = spawner, action=NOTIFY_ORBIT, header = "CTF has been activated")
+		spawner.start_ctf()
 
 /datum/ctf_controller/proc/add_team(obj/machinery/capture_the_flag/spawner)
 	if(!isnull(teams[spawner.team]))
@@ -48,13 +56,18 @@
 			return FALSE
 	return TRUE
 
-/datum/ctf_controller/proc/score_point(team_color)
+/datum/ctf_controller/proc/capture_flag(team_color, mob/living/user, team_span, flag)
 	teams[team_color].points++
+	message_all_teams("<span class='userdanger [team_span]'>[user.real_name] has captured \the [flag], scoring a point for [team_color] team! They now have [get_points(team_color)]/[points_to_win] points!</span>")
 	if(get_points(team_color) >= points_to_win)
 		victory(team_color)
 
 /datum/ctf_controller/proc/get_points(team_color)
 	return teams[team_color].points
+
+/datum/ctf_controller/proc/message_all_teams(message)
+	for(var/team in teams)
+		teams[team].message_team(message)
 
 /datum/ctf_controller/proc/victory(winning_team)
 	for(var/team in teams)
@@ -97,6 +110,11 @@
 				living_player.dropItemToGround(flag)
 			living_player.dust()
 	spawner.victory()
+
+/datum/ctf_team/proc/message_team(message)
+	for(var/player in team_members)
+		var/client/team_member = team_members[player]
+		to_chat(team_member, message)
 
 /proc/create_ctf_game()
 	if(GLOB.ctf_games[CTF_GAMEMODE_CAPTURE_THE_FLAG])

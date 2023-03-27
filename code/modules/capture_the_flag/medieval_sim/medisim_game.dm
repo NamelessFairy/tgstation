@@ -61,7 +61,8 @@
 	icon = 'icons/obj/toys/plushes.dmi'
 	icon_state = "plushie_nuke"
 	force = 0
-	game_area = /area/shuttle/escape
+	game_area = /area/shuttle/escape //This is going to cause a problem later
+	//Remember to add the new ID
 	movement_type = FLOATING //there are chasms, and resetting when they fall in is really lame so lets minimize that
 
 /obj/item/ctf/blue/medisim
