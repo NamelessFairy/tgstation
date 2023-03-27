@@ -9,7 +9,7 @@
 	var/points_to_win = 3
 	var/gamemode = CTF_GAMEMODE_CAPTURE_THE_FLAG
 	var/ctf_enabled = FALSE
-
+/*
 /datum/ctf_controller/New()
 	. = ..()
 	GLOB.ctf_games[game_id] = src
@@ -92,8 +92,8 @@
 /datum/ctf_team/New(obj/machinery/capture_the_flag/spawner)
 	. = ..()
 	src.spawner = spawner
-	team_color = spawner.team
-	team_span = spawner.team_span
+//	team_color = spawner.team
+//	team_span = spawner.team_span
 
 /datum/ctf_team/proc/reset_team()
 	points = 0
@@ -109,15 +109,17 @@
 			for(var/obj/item/ctf/flag in living_player)
 				living_player.dropItemToGround(flag)
 			living_player.dust()
-	spawner.victory()
+//	spawner.victory()
 
 /datum/ctf_team/proc/message_team(message)
 	for(var/player in team_members)
 		var/client/team_member = team_members[player]
 		to_chat(team_member, message)
+*/
 
 /proc/create_ctf_game()
 	if(GLOB.ctf_games[CTF_GAMEMODE_CAPTURE_THE_FLAG])
 		QDEL_NULL(GLOB.ctf_games[CTF_GAMEMODE_CAPTURE_THE_FLAG])
 	var/datum/ctf_controller/CTF = new()
 	return CTF
+
