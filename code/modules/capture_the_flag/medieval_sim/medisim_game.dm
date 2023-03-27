@@ -1,3 +1,4 @@
+/*
 ///These are for the medisim shuttle
 
 #define REDFIELD_TEAM "Red"
@@ -76,3 +77,4 @@
 
 #undef REDFIELD_TEAM
 #undef BLUESWORTH_TEAM
+ */
