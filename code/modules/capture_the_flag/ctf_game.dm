@@ -227,6 +227,49 @@
 #undef CTF_LOADING_LOADED
 
 //ToDo comment whatever vars I leave behind (btw maintainers I'm guarateed to forget to do this 🐈)
+//ITS ATTEMPT TWO TIME
+/obj/machinery/capture_the_flag
+	name = "CTF Controller"
+	desc = "Used for running friendly games of capture the flag."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "syndbeacon"
+	density = TRUE
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
+	var/game_id = CTF_GHOST_CTF_GAME_ID
+	var/team = WHITE_TEAM
+	var/team_span = ""
+	//Todo Comment this
+	var/datum/ctf_controller/ctf_game
+
+/obj/machinery/capture_the_flag/Initialize(mapload)
+	. = ..()
+	ctf_game = GLOB.ctf_games[game_id]
+
+/obj/machinery/capture_the_flag/spawner
+	var/victory_rejoin_text = "<span class='userdanger'>Teams have been cleared. Click on the machines to vote to begin another round.</span>"
+	var/respawn_cooldown = DEFAULT_RESPAWN
+	///assoc list for classes. If there's only one, it'll just equip. Otherwise, it lets you pick which outfit!
+	var/list/ctf_gear = list("Rifleman" = /datum/outfit/ctf, "Assaulter" = /datum/outfit/ctf/assault, "Marksman" = /datum/outfit/ctf/marksman)
+	var/list/instagib_gear = list("Instagib" = /datum/outfit/ctf/instagib)
+	var/list/default_gear
+	var/ammo_type = /obj/effect/powerup/ammo/ctf
+	// Fast paced gameplay, no real time for burn infections.
+	var/player_traits = list(TRAIT_NEVER_WOUNDED)
+
+/obj/machinery/capture_the_flag/spawner/Initialize(mapload)
+	. = ..()
+	ctf_game.add_team(src)
+	GLOB.ctf_panel.ctf_machines += src
+	SSpoints_of_interest.make_point_of_interest(src)
+	default_gear = ctf_gear
+	ctf_landmark = GLOB.ctf_spawner
+
+/obj/machinery/capture_the_flag/Destroy()
+	ctf_landmark = null
+	GLOB.ctf_panel.ctf_machines -= src
+	return ..()
+
+
 /obj/machinery/capture_the_flag
 	name = "CTF Controller"
 	desc = "Used for running friendly games of capture the flag."
@@ -362,7 +405,7 @@
 		return
 
 	ctf_game.add_player(team, user.client)
-	if(!user.mind.GetComponent(/datum/component/ctf_player))
+	if(!user.mind.GetComponent(/datum/component/ctf_player)) //Oh god this needs to run after they've been spawned
 		user.mind.AddComponent(/datum/component/ctf_player, team)
 	to_chat(user, "<span class='userdanger'>You are now a member of [src.team]. Get the enemy flag and bring it back to your team's controller!</span>")
 	spawn_team_member(user.client)
