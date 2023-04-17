@@ -337,3 +337,56 @@
 /obj/item/food/spiderlollipop/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/chewable)
+
+
+///new content down here, I'll re-organize these later.
+
+//Jellybean/Protobean
+
+/obj/item/food/flavourable
+	var/base_name = "food"
+	var/flavour = "plain"
+	var/datum/reagent/flavour_reagent
+	var/minimum_reagent = 10
+
+/obj/item/food/flavourable/Initialize(mapload)
+	. = ..()
+	name = "[flavour] [base_name]"
+
+/obj/item/food/flavourable/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(proximity_flag && target.is_open_container())
+		. |= AFTERATTACK_PROCESSED_ITEM
+		if(flavour != "plain")
+			target.balloon_alert(user, "already flavoured")
+			return .
+		var/datum/reagents/target_reagents = target.reagents
+		var/amount_to_beat
+		for(var/datum/reagent/reagent in target_reagents.reagent_list)
+			if(reagent.volume > amount_to_beat)
+				amount_to_beat = reagent.volume
+				flavour_reagent = reagent
+		if(amount_to_beat < minimum_reagent)
+			user.balloon_alert(target, "not enough reagent")
+			flavour_reagent = null
+			return . 
+		target_reagents.trans_id_to(src, flavour_reagent.type, minimum_reagent)
+		flavour = lowertext(flavour_reagent.name)
+		set_flavour()
+		return .
+
+/obj/item/food/flavourable/proc/set_flavour()
+	name = "[flavour] [base_name]"
+	tastes += flavour_reagent.get_taste_description()
+	add_atom_colour(flavour_reagent.color, FIXED_COLOUR_PRIORITY)
+
+/obj/item/food/flavourable/jellybean
+	name = "jellybean"
+	desc = "todo: this"
+	icon = 'icons/obj/food/candy.dmi'
+	icon_state = "jellybean"
+	tastes = list("sugar" = 1)
+	foodtypes = JUNKFOOD | SUGAR
+	food_flags = FOOD_FINGER_FOOD
+	base_name = "jellybean"
+	minimum_reagent = 4
