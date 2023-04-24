@@ -341,8 +341,6 @@
 
 ///new content down here, I'll re-organize these later.
 
-//Jellybean/Protobean
-
 /obj/item/food/flavourable
 	var/base_name = "food"
 	var/flavour = "plain"
@@ -361,32 +359,46 @@
 			target.balloon_alert(user, "already flavoured")
 			return .
 		var/datum/reagents/target_reagents = target.reagents
-		var/amount_to_beat
-		for(var/datum/reagent/reagent in target_reagents.reagent_list)
-			if(reagent.volume > amount_to_beat)
-				amount_to_beat = reagent.volume
-				flavour_reagent = reagent
-		if(amount_to_beat < minimum_reagent)
+		var/datum/reagent/temp_flavour_reagent = target_reagents.get_master_reagent()
+		if(temp_flavour_reagent?.volume < minimum_reagent || isnull(temp_flavour_reagent))
 			user.balloon_alert(target, "not enough reagent")
-			flavour_reagent = null
-			return . 
+			return .
+		
+		flavour_reagent = temp_flavour_reagent
 		target_reagents.trans_id_to(src, flavour_reagent.type, minimum_reagent)
-		flavour = lowertext(flavour_reagent.name)
 		set_flavour()
 		return .
 
 /obj/item/food/flavourable/proc/set_flavour()
-	name = "[flavour] [base_name]"
-	tastes += flavour_reagent.get_taste_description()
+	flavour = lowertext(flavour_reagent.name)
 	add_atom_colour(flavour_reagent.color, FIXED_COLOUR_PRIORITY)
+	if(findtext(flavour, "Juice")!=0)
+		flavour = replacetext(flavour, " Juice", "")
+	name = "[flavour] [base_name]"
 
 /obj/item/food/flavourable/jellybean
 	name = "jellybean"
 	desc = "todo: this"
 	icon = 'icons/obj/food/candy.dmi'
 	icon_state = "jellybean"
-	tastes = list("sugar" = 1)
+	food_reagents = list(/datum/reagent/consumable/nutriment = 1, /datum/reagent/consumable/sugar = 2)
+	bite_consumption = 6
 	foodtypes = JUNKFOOD | SUGAR
 	food_flags = FOOD_FINGER_FOOD
+	w_class = WEIGHT_CLASS_TINY
+	venue_value = FOOD_PRICE_WORTHLESS
 	base_name = "jellybean"
-	minimum_reagent = 4
+	minimum_reagent = 3
+
+/obj/item/food/flavourable/jellybean/proto
+	name = "proto-jellybean"
+	desc = "todo: this"
+	icon_state = "jellybean" //todo
+	food_reagents = list(/datum/reagent/consumable/nutriment = 5, /datum/reagent/consumable/sugar = 10)
+	food_flags = NONE
+	w_class = WEIGHT_CLASS_NORMAL
+	base_name = "proto-jellybean"
+	minimum_reagent = 15
+
+/obj/item/food/flavourable/jellybean/proto/make_processable()
+

@@ -20,7 +20,7 @@ SUBSYSTEM_DEF(lua)
 	/// Protects return values from getting GCed before getting converted to lua values
 	var/gc_guard
 
-/datum/controller/subsystem/lua/Initialize()
+/*/datum/controller/subsystem/lua/Initialize()
 	try
 		// Initialize the auxtools library
 		AUXTOOLS_CHECK(AUXLUA)
@@ -34,7 +34,7 @@ SUBSYSTEM_DEF(lua)
 	catch(var/exception/e)
 		// Something went wrong, best not allow the subsystem to run
 		warning("Error initializing SSlua: [e.name]")
-		return SS_INIT_FAILURE
+		return SS_INIT_FAILURE*/ //remember to uncomment
 
 /datum/controller/subsystem/lua/OnConfigLoad()
 	// Read the paths from the config file
