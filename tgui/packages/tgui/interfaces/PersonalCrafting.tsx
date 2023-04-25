@@ -60,6 +60,7 @@ const CATEGORY_ICONS_COOKING = {
   'Breads': 'bread-slice',
   'Burgers': 'burger',
   'Cakes': 'cake-candles',
+  'Candy': 'candy-cane',
   'Egg-Based Food': 'egg',
   'Frozen': 'ice-cream',
   'Lizard Food': 'dragon',

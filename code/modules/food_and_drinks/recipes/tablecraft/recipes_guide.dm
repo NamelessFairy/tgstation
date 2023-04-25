@@ -352,6 +352,15 @@
 	result = /obj/item/food/watermelonslice
 	category = CAT_SALAD
 
+/datum/crafting_recipe/food/knife/jellybean
+	reqs = list(/obj/item/food/flavourable/jellybean/proto = 1)
+	result = /obj/item/food/flavourable/jellybean
+	category = CAT_CANDY
+	steps = list(
+		"Dip into flavouring",
+		"Slice withb a knife"
+	)
+
 // Machinery: Grill
 
 /datum/crafting_recipe/food/grill
@@ -556,6 +565,15 @@
 /datum/crafting_recipe/food/grinder/peanutbutter
 	reqs = list(/obj/item/food/grown/peanut = 1)
 	result = /datum/reagent/consumable/peanut_butter
+
+/datum/crafting_recipe/food/grinder/jellybean
+	reqs = list(/datum/reagent/consumable/sugar = 10)
+	result = /obj/item/food/flavourable/jellybean/proto
+	category = CAT_CANDY
+	steps = list(
+		"Heat sugar to 380 degrees but no more than 413.15",
+		"Put into grinder and mix"
+	)
 
 // Machinery: Processor
 /datum/crafting_recipe/food/processor

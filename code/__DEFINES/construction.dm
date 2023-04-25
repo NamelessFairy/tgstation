@@ -86,6 +86,7 @@
 #define CAT_BREAD "Breads"
 #define CAT_BURGER "Burgers"
 #define CAT_CAKE "Cakes"
+#define CAT_CANDY "Candy"
 #define CAT_EGG "Egg-Based Food"
 #define CAT_LIZARD "Lizard Food"
 #define CAT_MEAT "Meats"
@@ -108,6 +109,7 @@ GLOBAL_LIST_INIT(crafting_category_food, list(
 	CAT_BREAD,
 	CAT_BURGER,
 	CAT_CAKE,
+	CAT_CANDY,
 	CAT_EGG,
 	CAT_LIZARD,
 	CAT_MEAT,

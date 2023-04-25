@@ -1,4 +1,6 @@
 #define MILK_TO_BUTTER_COEFF 15
+#define SUGAR_TO_JELLYBEAN_COEFF 10
+#define JELLYBEAN_TEMPERATURE_REQUIREMENT 380
 
 /obj/machinery/reagentgrinder
 	name = "\improper All-In-One Grinder"
@@ -344,7 +346,7 @@
 	operate_for(50, juicing = TRUE)
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/machinery/reagentgrinder, mix_complete)), 50)
 
-/obj/machinery/reagentgrinder/proc/mix_complete()
+/obj/machinery/reagentgrinder/proc/mix_complete() //This really needs to be refactored to use the recipe system at some point.
 	if(beaker?.reagents.total_volume)
 		//Recipe to make Butter
 		var/butter_amt = FLOOR(beaker.reagents.get_reagent_amount(/datum/reagent/consumable/milk) / MILK_TO_BUTTER_COEFF, 1)
@@ -361,5 +363,13 @@
 			var/amount = beaker.reagents.get_reagent_amount(/datum/reagent/consumable/cream)
 			beaker.reagents.remove_reagent(/datum/reagent/consumable/cream, amount)
 			beaker.reagents.add_reagent(/datum/reagent/consumable/whipped_cream, amount)
+		//Recipe to make Proto-Jellybean
+		if(beaker.reagents.has_reagent(/datum/reagent/consumable/sugar) && beaker.reagents.chem_temp >= JELLYBEAN_TEMPERATURE_REQUIREMENT)
+			var/jellybean_amount = FLOOR(beaker.reagents.get_reagent_amount(/datum/reagent/consumable/sugar) / SUGAR_TO_JELLYBEAN_COEFF, 1)
+			beaker.reagents.remove_reagent(/datum/reagent/consumable/sugar, SUGAR_TO_JELLYBEAN_COEFF * jellybean_amount)
+			for(var/i in 1 to jellybean_amount)
+				new /obj/item/food/flavourable/jellybean/proto(drop_location())
 
 #undef MILK_TO_BUTTER_COEFF
+#undef SUGAR_TO_JELLYBEAN_COEFF
+#undef JELLYBEAN_TEMPERATURE_REQUIREMENT

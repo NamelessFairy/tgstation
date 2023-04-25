@@ -40,6 +40,8 @@ Behavior that's still missing from this component that original food items had t
 	var/volume = 50
 	///The flavortext for taste (haha get it flavor text)
 	var/list/tastes
+	///Should custom names/descriptions carry over when an edible item is processed.
+	var/retain_customization
 
 /datum/component/edible/Initialize(
 	list/initial_reagents,
@@ -54,6 +56,7 @@ Behavior that's still missing from this component that original food items had t
 	datum/callback/after_eat,
 	datum/callback/on_consume,
 	datum/callback/check_liked,
+	retain_customization = TRUE,
 )
 	if(!isatom(parent))
 		return COMPONENT_INCOMPATIBLE
@@ -69,6 +72,7 @@ Behavior that's still missing from this component that original food items had t
 	src.on_consume = on_consume
 	src.tastes = string_assoc_list(tastes)
 	src.check_liked = check_liked
+	src.retain_customization = retain_customization
 
 	setup_initial_reagents(initial_reagents)
 
@@ -128,6 +132,7 @@ Behavior that's still missing from this component that original food items had t
 	datum/callback/after_eat,
 	datum/callback/on_consume,
 	datum/callback/check_liked,
+	retain_customization,
 )
 
 	// If we got passed an old comp, take only the values that will not override our current ones
@@ -256,10 +261,11 @@ Behavior that's still missing from this component that original food items had t
 	this_food.create_reagents(volume)
 	original_atom.reagents.copy_to(this_food, original_atom.reagents.total_volume / chosen_processing_option[TOOL_PROCESSING_AMOUNT], 1)
 
-	if(original_atom.name != initial(original_atom.name))
-		this_food.name = "slice of [original_atom.name]"
-	if(original_atom.desc != initial(original_atom.desc))
-		this_food.desc = "[original_atom.desc]"
+	if(retain_customization)
+		if(original_atom.name != initial(original_atom.name))
+			this_food.name = "slice of [original_atom.name]"
+		if(original_atom.desc != initial(original_atom.desc))
+			this_food.desc = "[original_atom.desc]"
 
 ///Called when food is crafted through a crafting recipe datum.
 /datum/component/edible/proc/OnCraft(datum/source, list/parts_list, datum/crafting_recipe/food/recipe)

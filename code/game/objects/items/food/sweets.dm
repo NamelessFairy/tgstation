@@ -361,7 +361,7 @@
 		var/datum/reagents/target_reagents = target.reagents
 		var/datum/reagent/temp_flavour_reagent = target_reagents.get_master_reagent()
 		if(temp_flavour_reagent?.volume < minimum_reagent || isnull(temp_flavour_reagent))
-			user.balloon_alert(target, "not enough reagent")
+			target.balloon_alert(user, "not enough reagent")
 			return .
 		
 		flavour_reagent = temp_flavour_reagent
@@ -381,7 +381,7 @@
 	desc = "todo: this"
 	icon = 'icons/obj/food/candy.dmi'
 	icon_state = "jellybean"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 1, /datum/reagent/consumable/sugar = 2)
+	food_reagents = list(/datum/reagent/consumable/nutriment = 0.5, /datum/reagent/consumable/sugar = 2)
 	bite_consumption = 6
 	foodtypes = JUNKFOOD | SUGAR
 	food_flags = FOOD_FINGER_FOOD
@@ -390,15 +390,28 @@
 	base_name = "jellybean"
 	minimum_reagent = 3
 
+/obj/item/food/flavourable/jellybean/make_edible()
+	. = ..()
+	var/datum/component/edible/edible_component = GetComponent(/datum/component/edible)
+	edible_component.retain_customization = FALSE
+
+/obj/item/food/flavourable/jellybean/OnCreatedFromProcessing(mob/living/user, obj/item/item, list/chosen_option, atom/original_atom)
+	. = ..()
+	var/obj/item/food/flavourable/protobean = original_atom
+	flavour_reagent = protobean.flavour_reagent
+	if(!isnull(flavour_reagent))
+		set_flavour()
+
 /obj/item/food/flavourable/jellybean/proto
 	name = "proto-jellybean"
 	desc = "todo: this"
 	icon_state = "jellybean" //todo
-	food_reagents = list(/datum/reagent/consumable/nutriment = 5, /datum/reagent/consumable/sugar = 10)
+	food_reagents = list(/datum/reagent/consumable/nutriment = 2.5, /datum/reagent/consumable/sugar = 10)
 	food_flags = NONE
 	w_class = WEIGHT_CLASS_NORMAL
 	base_name = "proto-jellybean"
 	minimum_reagent = 15
 
 /obj/item/food/flavourable/jellybean/proto/make_processable()
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/flavourable/jellybean, 5, 5 SECONDS, table_required = TRUE, screentip_verb = "Slice")
 
