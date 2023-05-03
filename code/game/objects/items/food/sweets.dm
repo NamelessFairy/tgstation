@@ -341,6 +341,63 @@
 
 ///new content down here, I'll re-organize these later.
 
+GLOBAL_LIST_INIT(candy_wrapper_recipes, list(
+new /datum/stack_recipe("candy bag", /obj/item/storage/candy_bag, 10, 1, 5, check_density = FALSE, time = 1 SECONDS, category = CAT_CANDY)))
+
+/obj/item/stack/candy_wrapper
+	name = "candy wrappers"
+	desc = "todo"
+	//icon = 'todo'
+	//icon_state = "todo"
+	amount = 1
+	max_amount = 50
+	singular_name = "candy wrapper"
+	merge_type = /obj/item/stack/candy_wrapper
+
+/obj/item/stack/candy_wrapper/get_main_recipes()
+	. = ..()
+	. += GLOB.candy_wrapper_recipes
+
+/obj/item/stack/candy_wrapper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(!proximity_flag)
+		return
+	if(!istype(target))
+		return
+	if(target.anchored)
+		return
+
+	if(istype(target, /obj/item/food))
+		. |= AFTERATTACK_PROCESSED_ITEM
+		//Todo check if something is actually candy
+		var/obj/item/food/target_food = target
+		var/datum/component/decomp_comp = target_food.GetComponent(/datum/component/decomposition)
+		if(use(1))
+			target_food.preserved_food = TRUE
+			QDEL_NULL(decomp_comp)
+
+/obj/item/stack/candy_wrapper/fifty
+	amount = 50
+
+/obj/item/storage/candy_bag
+	name = "candy bag"
+	desc = "todo"
+	//icons to do!
+	w_class = WEIGHT_CLASS_SMALL
+	
+/obj/item/storage/candy_bag/Initialize(mapload)
+	. = ..()
+	atom_storage.allow_quick_gather = TRUE
+	atom_storage.set_holdable(list(
+		/obj/item/food/flavourable/jellybean, //Todo add all candy here
+	))
+
+/obj/item/sticker/candy_wrapper
+	name = "used candy wrapper"
+	desc = "todo"
+	//icon_state = todo
+	contraband = TRUE
+
 /obj/item/food/flavourable
 	reagent_flags = INJECTABLE | NO_REACT
 	var/base_name = "food"
