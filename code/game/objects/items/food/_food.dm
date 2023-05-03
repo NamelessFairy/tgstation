@@ -46,6 +46,7 @@
 	var/decomp_req_handle = FALSE
 	///Used to set custom decomposition times for food. Set to 0 to have it automatically set via the food's flags.
 	var/decomposition_time = 0
+	var/reagent_flags = INJECTABLE
 
 /obj/item/food/Initialize(mapload)
 	. = ..()
@@ -78,6 +79,7 @@
 		eatverbs = eatverbs,\
 		bite_consumption = bite_consumption,\
 		junkiness = junkiness,\
+		reagent_flags = reagent_flags,\
 	)
 
 

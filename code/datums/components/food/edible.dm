@@ -40,6 +40,8 @@ Behavior that's still missing from this component that original food items had t
 	var/volume = 50
 	///The flavortext for taste (haha get it flavor text)
 	var/list/tastes
+	///Flags passed to the food items internal reagents.
+	var/reagent_flags = INJECTABLE
 	///Should custom names/descriptions carry over when an edible item is processed.
 	var/retain_customization
 
@@ -56,6 +58,7 @@ Behavior that's still missing from this component that original food items had t
 	datum/callback/after_eat,
 	datum/callback/on_consume,
 	datum/callback/check_liked,
+	reagent_flags,
 	retain_customization = TRUE,
 )
 	if(!isatom(parent))
@@ -72,6 +75,7 @@ Behavior that's still missing from this component that original food items had t
 	src.on_consume = on_consume
 	src.tastes = string_assoc_list(tastes)
 	src.check_liked = check_liked
+	src.reagent_flags = reagent_flags
 	src.retain_customization = retain_customization
 
 	setup_initial_reagents(initial_reagents)
@@ -132,6 +136,7 @@ Behavior that's still missing from this component that original food items had t
 	datum/callback/after_eat,
 	datum/callback/on_consume,
 	datum/callback/check_liked,
+	reagent_flags,
 	retain_customization,
 )
 
@@ -203,7 +208,7 @@ Behavior that's still missing from this component that original food items had t
 	if(owner.reagents)
 		owner.reagents.maximum_volume = volume
 	else
-		owner.create_reagents(volume, INJECTABLE)
+		owner.create_reagents(volume, reagent_flags)
 
 	for(var/rid in reagents)
 		var/amount = reagents[rid]

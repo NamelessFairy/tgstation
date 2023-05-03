@@ -342,6 +342,7 @@
 ///new content down here, I'll re-organize these later.
 
 /obj/item/food/flavourable
+	reagent_flags = INJECTABLE | NO_REACT
 	var/base_name = "food"
 	var/flavour = "plain"
 	var/datum/reagent/flavour_reagent
@@ -350,7 +351,6 @@
 /obj/item/food/flavourable/Initialize(mapload)
 	. = ..()
 	name = "[flavour] [base_name]"
-	reagents.flags = INJECTABLE | NO_REACT
 
 /obj/item/food/flavourable/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
