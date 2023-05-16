@@ -24,6 +24,8 @@
 		"camera_assembly",
 		"camera_film",
 		"camera",
+		"candy_bag",
+		"candy_wrapper",
 		"capbox",
 		"chisel",
 		"circuit_imprinter_offstation",

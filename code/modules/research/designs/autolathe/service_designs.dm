@@ -556,3 +556,28 @@
 		RND_CATEGORY_CONSTRUCTION + RND_SUBCATEGORY_CONSTRUCTION_MOUNTS,
 	)
 	departmental_flags = DEPARTMENT_BITFLAG_SERVICE
+
+/datum/design/candy_wrapper
+	name = "Candy Wrapper"
+	id = "candy_wrapper"
+	build_type = PROTOLATHE
+	materials = list(/datum/material/plastic = SMALL_MATERIAL_AMOUNT)
+	build_path = /obj/item/stack/candy_wrapper
+	category = list(
+		RND_CATEGORY_INITIAL,
+		RND_CATEGORY_EQUIPMENT + RND_SUBCATEGORY_EQUIPMENT_SERVICE,
+	)
+	departmental_flags = DEPARTMENT_BITFLAG_SERVICE
+	maxstack = 50
+
+/datum/design/candy_bag
+	name = "Candy Bag"
+	id = "candy_bag"
+	build_type = PROTOLATHE
+	materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT)
+	build_path = /obj/item/storage/candy_bag
+	category = list(
+		RND_CATEGORY_INITIAL,
+		RND_CATEGORY_EQUIPMENT + RND_SUBCATEGORY_EQUIPMENT_SERVICE,
+	)
+	departmental_flags = DEPARTMENT_BITFLAG_SERVICE

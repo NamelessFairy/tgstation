@@ -338,11 +338,7 @@
 	. = ..()
 	AddElement(/datum/element/chewable)
 
-
 ///new content down here, I'll re-organize these later.
-
-GLOBAL_LIST_INIT(candy_wrapper_recipes, list(
-new /datum/stack_recipe("candy bag", /obj/item/storage/candy_bag, 10, 1, 5, check_density = FALSE, time = 1 SECONDS, category = CAT_CANDY)))
 
 /obj/item/stack/candy_wrapper
 	name = "candy wrappers"
@@ -353,10 +349,6 @@ new /datum/stack_recipe("candy bag", /obj/item/storage/candy_bag, 10, 1, 5, chec
 	max_amount = 50
 	singular_name = "candy wrapper"
 	merge_type = /obj/item/stack/candy_wrapper
-
-/obj/item/stack/candy_wrapper/get_main_recipes()
-	. = ..()
-	. += GLOB.candy_wrapper_recipes
 
 /obj/item/stack/candy_wrapper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
