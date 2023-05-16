@@ -358,7 +358,7 @@
 	category = CAT_CANDY
 	steps = list(
 		"Dip into flavouring",
-		"Slice withb a knife"
+		"Slice with a knife"
 	)
 
 // Machinery: Grill
