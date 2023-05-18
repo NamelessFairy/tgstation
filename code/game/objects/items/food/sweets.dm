@@ -350,24 +350,6 @@
 	singular_name = "candy wrapper"
 	merge_type = /obj/item/stack/candy_wrapper
 
-/obj/item/stack/candy_wrapper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
-	. = ..()
-	if(!proximity_flag)
-		return
-	if(!istype(target))
-		return
-	if(target.anchored)
-		return
-
-	if(istype(target, /obj/item/food))
-		. |= AFTERATTACK_PROCESSED_ITEM
-		//Todo check if something is actually candy
-		var/obj/item/food/target_food = target
-		var/datum/component/decomp_comp = target_food.GetComponent(/datum/component/decomposition)
-		if(use(1))
-			target_food.preserved_food = TRUE
-			QDEL_NULL(decomp_comp)
-
 /obj/item/stack/candy_wrapper/fifty
 	amount = 50
 
@@ -439,6 +421,10 @@
 	venue_value = FOOD_PRICE_WORTHLESS
 	base_name = "jellybean"
 	minimum_reagent = 3
+
+/obj/item/food/flavourable/jellybean/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/wrappable)
 
 /obj/item/food/flavourable/jellybean/make_edible()
 	. = ..()

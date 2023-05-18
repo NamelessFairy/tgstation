@@ -22,6 +22,8 @@
 	var/decomp_result
 	/// Does our food attract ants?
 	var/produce_ants = FALSE
+	/// Used to block food from decomposing entirely regardless of handled or protected state.
+	var/paused = FALSE
 
 /datum/component/decomposition/Initialize(mapload, decomp_req_handle, decomp_flags = NONE, decomp_result, ant_attracting = FALSE, custom_time = 0)
 	if(!isobj(parent))
@@ -69,6 +71,11 @@
 	SIGNAL_HANDLER
 	if(!handled) // If maploaded, has someone touched this previously?
 		return
+
+	if(paused)
+		remove_timer()
+		return
+
 	var/obj/food = parent // Doesn't HAVE to be food, that's just what it's intended for
 
 	var/turf/open/open_turf = food.loc

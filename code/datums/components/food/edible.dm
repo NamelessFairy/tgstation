@@ -44,6 +44,8 @@ Behavior that's still missing from this component that original food items had t
 	var/reagent_flags = INJECTABLE
 	///Should custom names/descriptions carry over when an edible item is processed.
 	var/retain_customization
+	///Can this food be eaten, used if this food needs to be rendered temporarily inedible.
+	var/inedible = FALSE
 
 /datum/component/edible/Initialize(
 	list/initial_reagents,
@@ -461,6 +463,8 @@ Behavior that's still missing from this component that original food items had t
 
 ///Checks whether or not the eater can actually consume the food
 /datum/component/edible/proc/CanConsume(mob/living/eater, mob/living/feeder)
+	if(inedible)
+		return FALSE
 	if(!iscarbon(eater))
 		return FALSE
 	var/mob/living/carbon/C = eater
