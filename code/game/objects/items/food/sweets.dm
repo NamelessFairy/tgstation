@@ -356,7 +356,7 @@
 /obj/item/storage/candy_bag
 	name = "candy bag"
 	desc = "todo"
-	//icons to do!
+	//icons todo!
 	w_class = WEIGHT_CLASS_SMALL
 	
 /obj/item/storage/candy_bag/Initialize(mapload)
