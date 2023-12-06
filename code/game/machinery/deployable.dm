@@ -236,6 +236,41 @@
 	. = ..()
 	AddComponent(/datum/component/deployable, 5 SECONDS, /obj/machinery/deployable_turret/hmg, delete_on_use = TRUE)
 
+/obj/structure/barricade/bomberman
+	name = "brick wall"
+	desc = "Looks vunerable to explosives, but a toolbox will do."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "bricks"
+	max_integrity = 1
+	var/obj/powerup = null
+
+/obj/structure/barricade/bomberman/Initialize(mapload)
+	. = ..()
+	//Its an event so I can get away with this
+	resistance_flags = NONE
+
+/obj/structure/barricade/bomberman/atom_destruction(damage_flag)
+	if(!isnull(powerup))
+		new powerup(get_turf(src))
+	. = ..()
+
+/obj/structure/barricade/bomberman/powerup
+
+/obj/structure/barricade/bomberman/powerup/Initialize(mapload)
+	. = ..()
+	if (!prob(13))
+		return
+	powerup = pick(subtypesof(/obj/effect/powerup/bomberman))
+
+/obj/structure/barricade/bomberman/powerup/mirror
+	var/mirror_distance = 2
+
+/obj/structure/barricade/bomberman/powerup/mirror/Initialize(mapload)
+	. = ..()
+	var/obj/structure/barricade/bomberman/mirrored_wall = new /obj/structure/barricade/bomberman(locate(x + mirror_distance, y, z))
+	if(!isnull(powerup))
+		mirrored_wall.powerup = powerup 
+
 #undef SINGLE
 #undef VERTICAL
 #undef HORIZONTAL

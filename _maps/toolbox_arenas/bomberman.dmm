@@ -1,0 +1,296 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"f" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 4
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"g" = (
+/obj/structure/barricade/bomberman/powerup/mirror,
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"j" = (
+/turf/open/misc/grass/jungle,
+/area/centcom/tdome/arena)
+"k" = (
+/obj/structure/barricade/bomberman/powerup,
+/turf/open/misc/grass/jungle,
+/area/centcom/tdome/arena)
+"m" = (
+/turf/closed/wall,
+/area/centcom/tdome/arena)
+"A" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 6
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"B" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 16
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"D" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 12
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"E" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 10
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"G" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 14
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"J" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 8
+	},
+/turf/open/misc/grass/jungle,
+/area/centcom/tdome/arena)
+"L" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 4
+	},
+/turf/open/misc/grass/jungle,
+/area/centcom/tdome/arena)
+"M" = (
+/turf/closed/indestructible/bombermanwall,
+/area/centcom/tdome/arena)
+"P" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 12
+	},
+/turf/open/misc/grass/jungle,
+/area/centcom/tdome/arena)
+"Q" = (
+/obj/structure/barricade/bomberman/powerup,
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+"W" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 16
+	},
+/turf/open/misc/grass/jungle,
+/area/centcom/tdome/arena)
+"Z" = (
+/obj/structure/barricade/bomberman/powerup/mirror{
+	mirror_distance = 8
+	},
+/turf/open/floor/grass,
+/area/centcom/tdome/arena)
+
+(1,1,1) = {"
+m
+j
+a
+W
+B
+W
+B
+W
+a
+j
+"}
+(2,1,1) = {"
+m
+a
+M
+G
+M
+G
+M
+G
+M
+a
+"}
+(3,1,1) = {"
+m
+P
+D
+P
+D
+P
+D
+P
+D
+P
+"}
+(4,1,1) = {"
+m
+E
+M
+E
+M
+E
+M
+E
+M
+E
+"}
+(5,1,1) = {"
+m
+J
+Z
+J
+Z
+J
+Z
+J
+Z
+J
+"}
+(6,1,1) = {"
+m
+A
+M
+A
+M
+A
+M
+A
+M
+A
+"}
+(7,1,1) = {"
+m
+L
+f
+L
+f
+L
+f
+L
+f
+L
+"}
+(8,1,1) = {"
+m
+g
+M
+g
+M
+a
+M
+g
+M
+g
+"}
+(9,1,1) = {"
+m
+k
+Q
+k
+a
+j
+a
+k
+Q
+k
+"}
+(10,1,1) = {"
+m
+a
+M
+a
+M
+a
+M
+a
+M
+a
+"}
+(11,1,1) = {"
+m
+j
+a
+j
+a
+j
+a
+j
+a
+j
+"}
+(12,1,1) = {"
+m
+a
+M
+a
+M
+a
+M
+a
+M
+a
+"}
+(13,1,1) = {"
+m
+j
+a
+j
+a
+j
+a
+j
+a
+j
+"}
+(14,1,1) = {"
+m
+a
+M
+a
+M
+a
+M
+a
+M
+a
+"}
+(15,1,1) = {"
+m
+j
+a
+j
+a
+j
+a
+j
+a
+j
+"}
+(16,1,1) = {"
+m
+a
+M
+a
+M
+a
+M
+a
+M
+a
+"}
+(17,1,1) = {"
+m
+j
+a
+j
+a
+j
+a
+j
+a
+j
+"}
