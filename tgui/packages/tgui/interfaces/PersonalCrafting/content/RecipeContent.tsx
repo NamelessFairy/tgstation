@@ -89,6 +89,11 @@ export function RecipeContentCompact(props: Props) {
                     item.structures
                       .map((item) => data.atom_data[Number(item) - 1]?.name)
                       .join(', ')}
+                {item.mobs &&
+                  ', ' +
+                  item.mobs
+                  .map((item) => data.atom_data[Number(item) - 1]?.name)
+                  .join(', ')}
               </Box>
             </Stack.Item>
             <Stack.Item>
@@ -249,6 +254,14 @@ export function RecipeContent(props: FullProps) {
                   <Box>
                     <GroupTitle title="Structures" />
                     {item.structures.map((atom_id) => (
+                      <AtomContent key={atom_id} atom_id={atom_id} amount={1} />
+                    ))}
+                  </Box>
+                )}
+                {item.mobs && (
+                  <Box>
+                    <GroupTitle title="Mobs" />
+                    {item.mobs.map((atom_id) => (
                       <AtomContent key={atom_id} atom_id={atom_id} amount={1} />
                     ))}
                   </Box>

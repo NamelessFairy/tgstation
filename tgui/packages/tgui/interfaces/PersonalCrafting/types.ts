@@ -32,6 +32,7 @@ export type Recipe = {
   id: number;
   is_reaction: BooleanLike;
   machinery: string[];
+  mobs: string[];
   mass_craftable: BooleanLike;
   name: string;
   non_craftable: BooleanLike;

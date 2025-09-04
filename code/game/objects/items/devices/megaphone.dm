@@ -80,3 +80,6 @@
 	icon_state = "megaphone-clown"
 	inhand_icon_state = "megaphone-clown"
 	voicespan = list(SPAN_CLOWN)
+
+/obj/item/megaphone/improvised
+	name = "improvised megaphone"

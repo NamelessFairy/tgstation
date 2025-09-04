@@ -118,3 +118,12 @@
 	)
 	category = CAT_TOOLS
 
+/datum/crafting_recipe/improvised_megaphone
+	name = "Improvised Megaphone"
+	result = /obj/item/megaphone/improvised
+	reqs = list(
+		/obj/item/megaphone = 1,
+		/obj/item/stack/cable_coil = 5,
+	)
+	mobs = list(/mob/living/basic/mouse = CRAFTING_MOB_CONSUME)
+	category = CAT_TOOLS

@@ -2,10 +2,14 @@
 #define CRAFTING_MACHINERY_CONSUME 1
 ///If the structure is used/deleted in the crafting process
 #define CRAFTING_STRUCTURE_CONSUME 1
+///If the mob is used/deleted in the crafting process
+#define CRAFTING_MOB_CONSUME 1
 ///If the machine is only "used" i.e. it checks to see if it's nearby and allows crafting, but doesn't delete it
 #define CRAFTING_MACHINERY_USE 0
 ///If the structure is only "used" i.e. it checks to see if it's nearby and allows crafting, but doesn't delete it
 #define CRAFTING_STRUCTURE_USE 0
+///If the mob is only "used" i.e. it checks to see if it's nearby and allows crafting, but doesn't delete it
+#define CRAFTING_MOB_USE 0
 
 //stack recipe placement check types
 /// Checks if there is an object of the result type in any of the cardinal directions

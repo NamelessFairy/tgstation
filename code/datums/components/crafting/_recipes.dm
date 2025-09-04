@@ -34,6 +34,8 @@
 	var/list/machinery
 	///Required structures for the craft, set the assigned value of the typepath to CRAFTING_STRUCTURE_CONSUME or CRAFTING_STRUCTURE_USE. Lazy associative list: type_path key -> flag value.
 	var/list/structures
+	///Required mobs for the craft, set the assigned value of the typeepath to CRAFTING_MOB_CONSUME or CRAFTING_MOB_USE. Lazy associative list: type_path key -> flag value.
+	var/list/mobs
 	/// Bitflag of additional placement checks required to place. (STACK_CHECK_CARDINALS|STACK_CHECK_ADJACENT|STACK_CHECK_TRAM_FORBIDDEN|STACK_CHECK_TRAM_EXCLUSIVE)
 	var/placement_checks = NONE
 	/// Steps needed to achieve the result

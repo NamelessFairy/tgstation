@@ -4,6 +4,7 @@
 #define CONTENTS_STRUCTURES "structures"
 #define CONTENTS_REAGENTS "reagents"
 #define CONTENTS_TOOL_BEHAVIOUR "tool_behaviour"
+#define CONTENTS_MOBS "mobs"
 
 /// The portion of time spent crafting that recipe dependant on the speed of the tools
 #define RECIPE_DYNAMIC_TIME_COEFF 0.85
@@ -61,8 +62,11 @@
 	var/list/item_instances = contents[CONTENTS_INSTANCES]
 	var/list/machines = contents[CONTENTS_MACHINERY]
 	var/list/structures = contents[CONTENTS_STRUCTURES]
+	var/list/craft_mobs = contents[CONTENTS_MOBS]
 	contents = contents[CONTENTS_REAGENTS]
-
+	if(recipe.type == /datum/crafting_recipe/improvised_megaphone)
+		var/test = 1
+		test = 1+1
 
 	var/list/requirements_list = list()
 
@@ -114,6 +118,16 @@
 		if(!found)
 			return FALSE
 
+	var/mob_found = FALSE
+	for(var/mob_path in recipe.mobs)
+		mob_found = FALSE
+		for(var/mob/craft_mob as anything in craft_mobs)
+			if(ispath(craft_mob, mob_path))
+				mob_found = TRUE
+				break
+		if(!mob_found)
+			return FALSE
+
 	//Skip extra requirements when unit testing, like, underwater basket weaving? Get the hell out of here
 	return PERFORM_ALL_TESTS(crafting) || recipe.check_requirements(a, requirements_list)
 
@@ -139,7 +153,8 @@
 	.[CONTENTS_INSTANCES] = list()
 	.[CONTENTS_MACHINERY] = list()
 	.[CONTENTS_STRUCTURES] = list()
-	for(var/obj/object in get_environment(a, blacklist))
+	.[CONTENTS_MOBS] = list()
+	for(var/atom/movable/object in get_environment(a, blacklist))
 		if(isitem(object))
 			var/obj/item/item = object
 			LAZYADDASSOCLIST(.[CONTENTS_INSTANCES], item.type, item)
@@ -161,6 +176,8 @@
 			LAZYADDASSOCLIST(.[CONTENTS_MACHINERY], object.type, object)
 		else if (isstructure(object))
 			LAZYADDASSOCLIST(.[CONTENTS_STRUCTURES], object.type, object)
+		else if (ismob(object))
+			LAZYADDASSOCLIST(.[CONTENTS_MOBS], object.type, object)
 
 /// Returns a boolean on whether the tool requirements of the input recipe are satisfied by the input source and surroundings.
 /datum/component/personal_crafting/proc/check_tools(atom/source, datum/crafting_recipe/recipe, list/surroundings, final_check = FALSE)
@@ -383,10 +400,12 @@
 		requirements += recipe.machinery
 	if(recipe.structures)
 		requirements += recipe.structures
+	if(recipe.mobs)
+		requirements += recipe.mobs
 
 	for(var/path_key in requirements)
 		var/list/surroundings
-		var/amount = recipe.reqs?[path_key] || recipe.machinery?[path_key] || recipe.structures?[path_key]
+		var/amount = recipe.reqs?[path_key] || recipe.machinery?[path_key] || recipe.structures?[path_key] || recipe.mobs?[path_key]
 		if(!amount)//since machinery & structures can have 0 aka CRAFTING_MACHINERY_USE - i.e. use it, don't consume it!
 			continue
 		surroundings = get_environment(atom, recipe.blacklist)
@@ -667,6 +686,11 @@
 		for(var/req_atom in recipe.structures)
 			data["structures"] += atoms.Find(req_atom)
 
+	if(recipe.mobs)
+		data["mobs"] = list()
+		for(var/req_atom in recipe.mobs)
+			data["mobs"] += atoms.Find(req_atom)
+
 	// Ingredients / Materials
 	if(recipe.reqs.len)
 		data["reqs"] = list()
@@ -752,4 +776,5 @@
 #undef CONTENTS_STRUCTURES
 #undef CONTENTS_REAGENTS
 #undef CONTENTS_TOOL_BEHAVIOUR
+#undef CONTENTS_MOBS
 #undef RECIPE_DYNAMIC_TIME_COEFF
