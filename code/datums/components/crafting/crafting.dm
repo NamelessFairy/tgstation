@@ -685,7 +685,7 @@
 		data["structures"] = list()
 		for(var/req_atom in recipe.structures)
 			data["structures"] += atoms.Find(req_atom)
-
+	// Mobs
 	if(recipe.mobs)
 		data["mobs"] = list()
 		for(var/req_atom in recipe.mobs)

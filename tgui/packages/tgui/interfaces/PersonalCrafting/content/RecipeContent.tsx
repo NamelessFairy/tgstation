@@ -91,9 +91,9 @@ export function RecipeContentCompact(props: Props) {
                       .join(', ')}
                 {item.mobs &&
                   ', ' +
-                  item.mobs
-                  .map((item) => data.atom_data[Number(item) - 1]?.name)
-                  .join(', ')}
+                    item.mobs
+                      .map((item) => data.atom_data[Number(item) - 1]?.name)
+                      .join(', ')}
               </Box>
             </Stack.Item>
             <Stack.Item>

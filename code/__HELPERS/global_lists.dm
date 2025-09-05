@@ -136,6 +136,9 @@
 			// Structures
 			for(var/atom/req_atom as anything in recipe.structures)
 				atom_list |= req_atom
+			// Mobs
+			for(var/atom/req_atom as anything in recipe.mobs)
+				atom_list |= req_atom
 
 //creates every subtype of prototype (excluding prototype) and adds it to list L.
 //if no list/L is provided, one is created.
